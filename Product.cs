@@ -1,15 +1,22 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Task2
 {
     /// <summary>
     /// Класс Продукт - реализация Товара
     /// </summary>
+    [Serializable]
     public class Product : Goods
     {
-        public DateTime productionDate { get; set; }
-        public int shelfLife { get; set; }
+        public Product()
+        {
+        }
+
+        [XmlAttribute] public DateTime productionDate { get; set; }
+        [XmlAttribute] public int shelfLife { get; set; }
 
         /// <summary>
         /// Конструктор класса Product
@@ -27,6 +34,7 @@ namespace Task2
             this.productionDate = new DateTime(year, month, day);
             this.shelfLife = shelfLife;
         }
+
         /// <summary>
         /// Конструктор, который считывает из файла значения name,price,day,month,year и shelfLife, чтобы создать новый Product
         /// </summary>
@@ -41,22 +49,26 @@ namespace Task2
             this.productionDate = new DateTime(year, month, day);
             this.shelfLife = int.Parse(streamReader.ReadLine());
         }
+
         /// <summary>
         /// Этот метод выводит в консоль информацию о продукте
         /// </summary>
         public override void printInformation()
         {
+            Trace.WriteLine("Product.printInformation");
             Console.WriteLine("Product name: " + this.name);
             Console.WriteLine("Price: " + this.price);
             Console.WriteLine("Production date: " + this.productionDate.ToShortDateString());
             Console.WriteLine("Shelf life: " + shelfLife + " days \n");
         }
+
         /// <summary>
         /// Этот метод проверяет, соответствует ли продукт сроку годности на текущую дату
         /// </summary>
         /// <returns>true, если продукт не просрочен, в противном случае - false</returns>
         public override bool isFresh()
         {
+            Trace.WriteLine("Product.isFresh");
             return productionDate.AddDays(shelfLife) >= DateTime.Today;
         }
     }

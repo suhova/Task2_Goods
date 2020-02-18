@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Task2
 {
@@ -9,7 +11,11 @@ namespace Task2
     /// </summary>
     public class Set : Goods
     {
-        public List<Product> set { get; set; }
+        public Set()
+        {
+        }
+
+        [XmlArray] public List<Product> set { get; set; }
 
         /// <summary>
         /// Конструктор класса Set
@@ -23,6 +29,7 @@ namespace Task2
             this.price = price;
             this.set = set;
         }
+
         /// <summary>
         /// Конструктор, который считывает из файла значения name,price и всех Product набора
         /// </summary>
@@ -39,27 +46,31 @@ namespace Task2
 
             this.set = list;
         }
+
         /// <summary>
         /// Этот метод выводит в консоль информацию о наборе
         /// </summary>
         public override void printInformation()
         {
+            Trace.WriteLine("Set.printInformation");
             Console.WriteLine("Set name: " + this.name);
             Console.WriteLine("Price: " + this.price);
             Console.WriteLine("Products: ");
             for (int i = 1; i <= set.Count; i++)
             {
-                Console.WriteLine(i + ". " + set[i-1].name);
+                Console.WriteLine(i + ". " + set[i - 1].name);
             }
 
             Console.WriteLine();
         }
+
         /// <summary>
         /// Этот метод проверяет, соответствует ли набор сроку годности на текущую дату
         /// </summary>
         /// <returns>true, если все продукты в наборе не просрочены, в противном случае - false</returns>
         public override bool isFresh()
         {
+            Trace.WriteLine("Set.isFresh");
             foreach (Product prod in set)
             {
                 if (!prod.isFresh())

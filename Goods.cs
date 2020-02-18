@@ -1,11 +1,16 @@
-﻿namespace Task2
+﻿using System.Xml.Serialization;
+
+namespace Task2
 {
     /// <summary>
     /// Класс - абстракия над товаром 
     /// </summary>
+    [XmlInclude(typeof(Product)),XmlInclude(typeof(Set)),XmlInclude(typeof(Consignment))]
     public abstract class Goods
     {
+        [XmlAttribute]
         public string name;
+        [XmlAttribute]
         public double price;
         /// <summary>
         /// Этот абстрактный метод выводит в консоль информацию о товаре

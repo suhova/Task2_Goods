@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Task2
 {
@@ -18,8 +20,9 @@ namespace Task2
         /// </summary>
         static void Main(string[] args)
         {
-           craeteInput();
-           using (StreamReader streamReader = new StreamReader("input.txt"))
+            Trace.Indent();
+            createInput();
+            using (StreamReader streamReader = new StreamReader(@"input.txt"))
            {
                int n = int.Parse(streamReader.ReadLine());
                Goods[] goods = new Goods[n];
@@ -47,14 +50,17 @@ namespace Task2
                    good.printInformation();
                }
                printExpiredGoods(goods);
+               serializeGoods(goods);
+               Trace.Flush();
            }
         }
         /// <summary>
         /// Создание файла input.txt с тестовыми данными
         /// </summary>
-        private static void craeteInput()
+        private static void createInput()
         {
-            using (StreamWriter streamWriter = new StreamWriter("input.txt"))
+            Trace.WriteLine("Main.createInput");
+            using (StreamWriter streamWriter = new StreamWriter(@"input.txt"))
             {
                 streamWriter.WriteLine("4\r\nP\r\nprod1\r\n12,2\r\n11\r\n09\r\n1999\r\n5");
                 streamWriter.WriteLine("P\r\nprod2\r\n2000\r\n7\r\n01\r\n2020\r\n100");
@@ -71,7 +77,7 @@ namespace Task2
         /// <param name="goods">Массив товаров</param>
         private static void printExpiredGoods(Goods[] goods)
         {
-            
+            Trace.WriteLine("Main.printExpiredGoods");
             List<string> list = new List<string>();
             foreach (var good in goods)
             {
@@ -88,6 +94,22 @@ namespace Task2
                 foreach (var item in list)
                 {
                     Console.WriteLine(item);
+                }
+            }
+        }
+        /// <summary>
+        /// Сериализация товаров в файл output.txt
+        /// </summary>
+        /// <param name="goods">Массив товаров</param>
+        private static void serializeGoods(Goods[] goods)
+        {
+            Trace.WriteLine("Main.serializeMyObjects");
+            XmlSerializer serializer = new XmlSerializer(typeof(Goods));
+            using (StreamWriter streamWriter = new StreamWriter(@"output.txt"))
+            {
+                foreach (var item in goods)
+                {
+                    serializer.Serialize(streamWriter, item);
                 }
             }
         }

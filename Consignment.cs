@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Task2
 {
@@ -8,9 +10,13 @@ namespace Task2
     /// </summary>
     public class Consignment : Goods
     {
-        public int amount { get; set; }
-        public DateTime productionDate { get; set; }
-        public int shelfLife { get; set; }
+        public Consignment()
+        {
+        }
+
+        [XmlAttribute] public int amount { get; set; }
+        [XmlAttribute] public DateTime productionDate { get; set; }
+        [XmlAttribute] public int shelfLife { get; set; }
 
         /// <summary>
         /// Конструктор класса Consignment
@@ -30,6 +36,7 @@ namespace Task2
             this.productionDate = new DateTime(year, month, day);
             this.shelfLife = shelfLife;
         }
+
         /// <summary>
         /// Конструктор, который считывает из файла значения name,price,amount,day,month,year и shelfLife, чтобы создать новый Consignment
         /// </summary>
@@ -45,23 +52,27 @@ namespace Task2
             this.productionDate = new DateTime(year, month, day);
             this.shelfLife = int.Parse(streamReader.ReadLine());
         }
+
         /// <summary>
         /// Этот метод выводит в консоль информацию о партии
         /// </summary>
         public override void printInformation()
         {
+            Trace.WriteLine("Consignment.printInformation");
             Console.WriteLine("Сonsignment name: " + this.name);
             Console.WriteLine("Amount: " + this.amount);
             Console.WriteLine("Price: " + this.price);
             Console.WriteLine("Production date: " + this.productionDate.ToShortDateString());
             Console.WriteLine("Shelf life: " + shelfLife + " days \n");
         }
+
         /// <summary>
         /// Этот метод проверяет, соответствует ли партия сроку годности на текущую дату
         /// </summary>
         /// <returns>true, если партия не просрочена, в противном случае - false</returns>
         public override bool isFresh()
         {
+            Trace.WriteLine("Consignment.isFresh");
             return productionDate.AddDays(shelfLife) >= DateTime.Today;
         }
     }
